@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% block title %} Корзина — Sudsology {% endblock %}
+{% block content %}
+<div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+  <div
+    class="d-flex flex-wrap justify-content-between gap-2 align-items-end mb-3"
+  >
+    <div>
+      <h2 class="h5 mb-1">Корзина</h2>
+      <div class="text-muted small">Товары, которые ты выбрал(а).</div>
+    </div>
+    <button class="btn btn-success btn-sm" type="button">Оформить заказ</button>
+  </div>
+
+  {% if items %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th class="text-end">Цена</th>
+          <th class="text-center">Кол-во</th>
+          <th class="text-end">Сумма</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in items %}
+        <tr>
+          <td>
+            <div class="fw-semibold">{{ i.product.name }}</div>
+            <div class="text-muted small">
+              Категория: {{ i.product.category.name }}
+            </div>
+          </td>
+          <td class="text-end">{{ i.product.price|floatformat:2 }}</td>
+          <td class="text-center">{{ i.quantity }}</td>
+          <td class="text-end fw-semibold">{{ i.line_total|floatformat:2 }}</td>
+          <td class="text-end">
+            <button class="btn btn-outline-success btn-sm" type="button">
+              Удалить
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-muted small">Корзина пока пустая.</div>
+  {% endif %}
+
+  <div class="d-flex justify-content-end">
+    <div class="border rounded-3 p-3 bg-suds-accent border-success-subtle">
+      <div class="d-flex justify-content-between gap-4">
+        <div class="text-muted">Итого</div>
+        <div class="fw-semibold">{{ total|floatformat:2 }} BYN</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

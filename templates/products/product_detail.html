@@ -1,0 +1,95 @@
+{% extends "base.html" %} {% block title %} {{ object.name }} — Sudsology
+{%endblock %} {% block content %}
+<div class="mb-3">
+  <a class="link-success" href="{% url 'products:catalog' %}"
+    >← Назад в каталог</a
+  >
+</div>
+
+<div class="row g-3">
+  <div class="col-md-5">
+    <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+      {% with img=object.main_image %} {% if img %}
+      <img
+        src="{{ img.image.url }}"
+        class="img-fluid rounded-3 border border-success-subtle"
+        alt="{{ object.name }}"
+      />
+      {% else %}
+      <div
+        class="ratio ratio-1x1 bg-suds-accent rounded-3 border border-success-subtle"
+      ></div>
+      {% endif %} {% endwith %}
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+      <h2 class="h4 mb-1">{{ object.name }}</h2>
+      <div class="text-muted small mb-3">
+        Категория: {{ object.category.name }}
+      </div>
+
+      <div class="display-6 fw-semibold mb-3">
+        {{ object.price|floatformat:2 }} BYN
+      </div>
+
+      <p class="mb-4">{{ object.description }}</p>
+
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <button class="btn btn-success" type="button">
+          Добавить в корзину
+        </button>
+        <span class="text-muted small"
+          >Остаток: {{ object.stock_quantity }}</span
+        >
+      </div>
+
+      <hr class="my-4" />
+
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <div class="fw-semibold mb-2">Описание</div>
+          <div class="text-muted small">
+            Подходит для ежедневного ухода. Мягкое очищение, свежий аромат,
+            аккуратная пена.
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="fw-semibold mb-2">Характеристики</div>
+          <ul class="small text-muted mb-0">
+            <li>Вес: 90–110 г</li>
+            <li>Тип кожи: нормальная/комбинированная</li>
+            <li>Аромат: свежий</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="my-4" />
+      <div class="fw-semibold mb-2">Отзывы</div>
+      {% if reviews %}
+      <div class="vstack gap-3">
+        {% for r in reviews %}
+        <div class="border rounded-3 p-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="fw-semibold">{{ r.user.username }}</div>
+            <div class="text-muted small">{{ r.created_at|date:"d.m.Y" }}</div>
+          </div>
+          <div class="small text-muted mb-1">Оценка: {{ r.rating }}/5</div>
+          <div>{{ r.comment }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="border rounded-3 p-3">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="fw-semibold">Анастасия</div>
+          <div class="text-muted small">19.04.2026</div>
+        </div>
+        <div class="small text-muted mb-1">Оценка: 5/5</div>
+        <div>Очень приятный аромат, кожу не сушит. Возьму ещё.</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

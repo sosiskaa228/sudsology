@@ -1,0 +1,114 @@
+{% extends "base.html" %} {% block title %} Каталог — Sudsology {% endblock %}
+{% block content %}
+<div
+  class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3"
+>
+  <div>
+    <h2 class="h4 mb-1">Каталог</h2>
+  </div>
+  <form class="d-flex gap-2" method="get" action="#">
+    <input
+      class="form-control form-control-sm"
+      type="search"
+      placeholder="Поиск"
+    />
+    <button class="btn btn-success btn-sm" type="button">Найти</button>
+  </form>
+</div>
+
+{% if object_list %}
+<div class="row g-3">
+  {% for p in object_list %}
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card h-100 shadow-sm border-success-subtle">
+      {% with img=p.main_image %} {% if img %}
+      <img src="{{ img.image.url }}" class="card-img-top" alt="{{ p.name }}" />
+      {% endif %} {% endwith %}
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <h3 class="h6 mb-1">{{ p.name }}</h3>
+        </div>
+        <div class="text-muted small mb-2">
+          Категория: {{ p.category.name }}
+        </div>
+        <div class="fw-semibold mb-2">{{ p.price|floatformat:2 }} BYN</div>
+        <div class="d-flex gap-2">
+          <a
+            class="btn btn-outline-success btn-sm"
+            href="{% url 'products:product_detail' p.pk %}"
+            >Открыть</a
+          >
+          <button class="btn btn-success btn-sm" type="button" disabled>
+            В корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="row g-3">
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card h-100 shadow-sm border-success-subtle">
+      <div class="card-body">
+        <h3 class="h6 mb-1">Мыло “Мята и лайм”</h3>
+        <div class="text-muted small mb-2">Категория: Мыло</div>
+        <div class="fw-semibold mb-2">12.90 BYN</div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-success btn-sm" href="#">Открыть</a>
+          <button class="btn btn-success btn-sm" type="button">
+            В корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card h-100 shadow-sm border-success-subtle">
+      <div class="card-body">
+        <h3 class="h6 mb-1">Бомбочка “Лаванда”</h3>
+        <div class="text-muted small mb-2">Категория: Ванна</div>
+        <div class="fw-semibold mb-2">8.50 BYN</div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-success btn-sm" href="#">Открыть</a>
+          <button class="btn btn-success btn-sm" type="button">
+            В корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card h-100 shadow-sm border-success-subtle">
+      <div class="card-body">
+        <h3 class="h6 mb-1">Скраб “Кокос”</h3>
+        <div class="text-muted small mb-2">Категория: Уход</div>
+        <div class="fw-semibold mb-2">16.00 BYN</div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-success btn-sm" href="#">Открыть</a>
+          <button class="btn btn-success btn-sm" type="button">
+            В корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+    <div class="card h-100 shadow-sm border-success-subtle">
+      <div class="card-body">
+        <h3 class="h6 mb-1">Мыло “Овсянка и мёд”</h3>
+        <div class="text-muted small mb-2">Категория: Мыло</div>
+        <div class="fw-semibold mb-2">11.50 BYN</div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-success btn-sm" href="#">Открыть</a>
+          <button class="btn btn-success btn-sm" type="button">
+            В корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %}

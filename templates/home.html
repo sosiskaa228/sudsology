@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Главная — Sudsology{% endblock %}
+
+{% block content %}
+  <div class="p-4 p-md-5 rounded-3 bg-white shadow-sm border border-success-subtle">
+    <div class="row align-items-center g-4">
+      <div class="col-md-12">
+        <h1 class="display-6 fw-semibold mb-2">Sudsology</h1>
+        <p class="lead mb-3">
+          Натуральное мыло, бомбочки для ванны и уходовая косметика в мягких, свежих ароматах.
+        </p>
+        <div class="d-flex gap-2">
+          <a class="btn btn-success" href="{% url 'products:catalog' %}">Открыть каталог</a>
+          <a class="btn btn-outline-success" href="{% url 'users:account' %}">Личный кабинет</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Заказы — Sudsology{% endblock %}
+
+{% block content %}
+  <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+    <div class="d-flex flex-wrap justify-content-between gap-2 align-items-end mb-3">
+      <div>
+        <h2 class="h5 mb-1">Заказы</h2>
+        <div class="text-muted small">История покупок.</div>
+      </div>
+      <a class="btn btn-outline-success btn-sm" href="{% url 'products:catalog' %}">Перейти в каталог</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th class="text-end">Сумма</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if orders %}
+            {% for o in orders %}
+              <tr>
+                <td class="fw-semibold">{{ o.id }}</td>
+                <td>{{ o.created_at|date:"d.m.Y" }}</td>
+                <td>{{ o.get_status_display }}</td>
+                <td class="text-end fw-semibold">{{ o.total_price|floatformat:2 }} BYN</td>
+                <td class="text-end"><button class="btn btn-outline-success btn-sm" type="button">Открыть</button></td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" class="text-muted">Заказов пока нет.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+

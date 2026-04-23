@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block title %}Личный кабинет —
+Sudsology{%endblock%} {% block content %}
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+      <h2 class="h5 mb-2">Личный кабинет</h2>
+      <div class="text-muted small mb-3">
+        Профиль, корзина и история заказов.
+      </div>
+
+      <div class="bg-suds-accent border border-success-subtle rounded-3 p-3">
+        <div class="fw-semibold">Покупатель</div>
+        {% if customer %}
+        <div class="text-muted small">Имя: {{ customer.username }}</div>
+        <div class="text-muted small mb-0">Email: {{ customer.email }}</div>
+        {% else %}
+        <div class="text-muted small mb-0">Пользователь не найден</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="vstack gap-3">
+      <div
+        class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm"
+      >
+        <div class="d-flex justify-content-between align-items-end gap-2 mb-3">
+          <div>
+            <h3 class="h6 mb-1">Корзина</h3>
+            <div class="text-muted small">Выбранные товары.</div>
+          </div>
+          <a class="btn btn-outline-success btn-sm" href="{% url 'cart:cart' %}"
+            >Открыть</a
+          >
+        </div>
+        <div class="d-flex justify-content-between">
+          <div>
+            Позиций: <span class="fw-semibold">{{ cart_items_count }}</span>
+          </div>
+          <div>
+            Сумма:
+            <span class="fw-semibold">{{ cart_total|floatformat:2 }} BYN</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm"
+      >
+        <div class="d-flex justify-content-between align-items-end gap-2 mb-3">
+          <div>
+            <h3 class="h6 mb-1">Заказы</h3>
+            <div class="text-muted small">История покупок.</div>
+          </div>
+          <a
+            class="btn btn-outline-success btn-sm"
+            href="{% url 'orders:list' %}"
+            >Открыть</a
+          >
+        </div>
+
+        {% if orders %}
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th class="text-end">Сумма</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in orders %}
+              <tr>
+                <td class="fw-semibold">{{ o.id }}</td>
+                <td>{{ o.created_at|date:"d.m.Y" }}</td>
+                <td>{{ o.get_status_display }}</td>
+                <td class="text-end fw-semibold">{{ o.total_price }} BYN</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-muted small">Пока нет заказов.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
