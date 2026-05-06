@@ -11,7 +11,88 @@ Sudsology{%endblock%} {% block content %}
       <div class="bg-suds-accent border border-success-subtle rounded-3 p-3">
         <div class="fw-semibold">Покупатель</div>
         <div class="text-muted small">Имя: {{ customer.username }}</div>
-        <div class="text-muted small mb-0">Email: {{ customer.email }}</div>
+        <div class="text-muted small">Email: {{ customer.email }}</div>
+        <div class="text-muted small mb-0">Телефон: {{ customer.phone|default:"—" }}</div>
+      </div>
+      <div class="d-grid gap-2 mt-3">
+        <button
+          class="btn btn-outline-success btn-sm"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#profileEdit"
+        >
+          Редактировать профиль
+        </button>
+        <button
+          class="btn btn-outline-success btn-sm"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#passwordEdit"
+        >
+          Сменить пароль
+        </button>
+      </div>
+
+      <div class="collapse mt-3 {% if profile_form.errors %}show{% endif %}" id="profileEdit">
+        <div class="border border-success-subtle rounded-3 p-3">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="profile" />
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="{{ profile_form.username.id_for_label }}">Логин</label>
+              {{ profile_form.username }}
+              {% if profile_form.username.errors %}
+                <div class="text-danger small mt-1">{{ profile_form.username.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="{{ profile_form.email.id_for_label }}">Email</label>
+              {{ profile_form.email }}
+              {% if profile_form.email.errors %}
+                <div class="text-danger small mt-1">{{ profile_form.email.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label small mb-1" for="{{ profile_form.phone.id_for_label }}">Телефон</label>
+              {{ profile_form.phone }}
+              {% if profile_form.phone.errors %}
+                <div class="text-danger small mt-1">{{ profile_form.phone.errors }}</div>
+              {% endif %}
+            </div>
+            <button class="btn btn-success btn-sm w-100" type="submit">Сохранить профиль</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="collapse mt-3 {% if password_form.errors %}show{% endif %}" id="passwordEdit">
+        <div class="border border-success-subtle rounded-3 p-3">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="form_type" value="password" />
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="{{ password_form.old_password.id_for_label }}">Текущий пароль</label>
+              {{ password_form.old_password }}
+              {% if password_form.old_password.errors %}
+                <div class="text-danger small mt-1">{{ password_form.old_password.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="{{ password_form.new_password1.id_for_label }}">Новый пароль</label>
+              {{ password_form.new_password1 }}
+              {% if password_form.new_password1.errors %}
+                <div class="text-danger small mt-1">{{ password_form.new_password1.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label small mb-1" for="{{ password_form.new_password2.id_for_label }}">Повторите новый пароль</label>
+              {{ password_form.new_password2 }}
+              {% if password_form.new_password2.errors %}
+                <div class="text-danger small mt-1">{{ password_form.new_password2.errors }}</div>
+              {% endif %}
+            </div>
+            <button class="btn btn-success btn-sm w-100" type="submit">Сохранить пароль</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
