@@ -7,9 +7,16 @@
     <div class="d-flex flex-wrap justify-content-between gap-2 align-items-end mb-3">
       <div>
         <h2 class="h5 mb-1">Заказы</h2>
-        <div class="text-muted small">История покупок.</div>
+        <div class="text-muted small">
+          История покупок
+          <span class="fw-semibold">{{ customer.username }}</span>.
+        </div>
       </div>
-      <a class="btn btn-outline-success btn-sm" href="{% url 'products:catalog' %}">Перейти в каталог</a>
+      <a
+        class="btn btn-outline-success btn-sm"
+        href="{% url 'users:account' %}"
+        >В кабинет</a
+      >
     </div>
 
     <div class="table-responsive">

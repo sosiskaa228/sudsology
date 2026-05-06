@@ -1,16 +1,37 @@
 from decimal import Decimal
 
-from django.contrib.auth import get_user_model
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.db.models import F, Sum
 from django.shortcuts import render
 
 from cart.models import CartItem
 from orders.models import Order
+from .forms import RegisterForm
 
 
+def register(request):
+    if request.user.is_authenticated:
+        return redirect("users:account")
+
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Регистрация прошла успешно.")
+            return redirect("users:account")
+    else:
+        form = RegisterForm()
+
+    return render(request, "users/register.html", {"form": form})
+
+
+@login_required
 def account(request):
-    User = get_user_model()
-    customer = User.objects.filter(username="customer").first()
+    customer = request.user
 
     cart_items = []
     cart_items_count = 0

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Вход — Sudsology{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+        <h2 class="h5 mb-3">Вход</h2>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.username.id_for_label }}">Логин</label>
+            <input
+              class="form-control"
+              type="text"
+              name="{{ form.username.html_name }}"
+              id="{{ form.username.id_for_label }}"
+              value="{{ form.username.value|default_if_none:'' }}"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.password.id_for_label }}">Пароль</label>
+            <input
+              class="form-control"
+              type="password"
+              name="{{ form.password.html_name }}"
+              id="{{ form.password.id_for_label }}"
+              required
+            />
+          </div>
+          <button class="btn btn-success w-100" type="submit">Войти</button>
+        </form>
+        <div class="small text-muted mt-3">
+          Нет аккаунта?
+          <a href="{% url 'users:register' %}">Зарегистрироваться</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

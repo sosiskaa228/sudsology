@@ -6,9 +6,16 @@
   >
     <div>
       <h2 class="h5 mb-1">Корзина</h2>
-      <div class="text-muted small">Товары, которые ты выбрал(а).</div>
+      <div class="text-muted small">
+        Товары, которые выбрал(а)
+        <span class="fw-semibold">{{ customer.username }}</span>.
+      </div>
     </div>
-    <button class="btn btn-success btn-sm" type="button">Оформить заказ</button>
+    <a
+      class="btn btn-outline-success btn-sm"
+      href="{% url 'users:account' %}"
+      >В кабинет</a
+    >
   </div>
 
   {% if items %}
