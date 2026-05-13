@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
@@ -78,16 +78,3 @@ class ProfileUpdateForm(forms.ModelForm):
         if qs.exists():
             raise ValidationError("Пользователь с таким номером телефона уже существует.")
         return phone
-
-
-class CustomPasswordChangeForm(PasswordChangeForm):
-    error_messages = {
-        "password_incorrect": "Текущий пароль введен неверно.",
-        "password_mismatch": "Новые пароли не совпадают.",
-    }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["old_password"].widget.attrs["class"] = "form-control"
-        self.fields["new_password1"].widget.attrs["class"] = "form-control"
-        self.fields["new_password2"].widget.attrs["class"] = "form-control"
