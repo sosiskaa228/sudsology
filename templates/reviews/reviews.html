@@ -1,36 +1,33 @@
-{% extends "base.html" %}
-
-{% block title %}Отзывы — Sudsology{% endblock %}
-
-{% block content %}
-  <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
-    <div class="d-flex flex-wrap justify-content-between gap-2 align-items-end mb-3">
-      <div>
-        <h2 class="h5 mb-1">Отзывы</h2>
-        <div class="text-muted small">Что говорят покупатели.</div>
-      </div>
-      <button class="btn btn-success btn-sm" type="button">Оставить отзыв</button>
+{% extends "base.html" %} {% block title %}Отзывы — Sudsology{% endblock %} {%
+block content %}
+<div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
+  <div
+    class="d-flex flex-wrap justify-content-between gap-2 align-items-end mb-3"
+  >
+    <div>
+      <h2 class="h5 mb-1">Отзывы</h2>
+      <div class="text-muted small">Что говорят покупатели.</div>
     </div>
-
-    {% if object_list %}
-      <div class="vstack gap-3">
-        {% for r in object_list %}
-          <div class="border rounded-3 p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="fw-semibold">{{ r.user.username }}</div>
-              <div class="text-muted small">{{ r.created_at|date:"d.m.Y" }}</div>
-            </div>
-            <div class="small text-muted mb-1">
-              Товар: {{ r.product.name }} • Оценка: {{ r.rating }}/5
-            </div>
-            <div>{{ r.comment }}</div>
-          </div>
-        {% endfor %}
-      </div>
-
-    {% else %}
-      <div class="text-muted small">Пока нет отзывов.</div>
-    {% endif %}
   </div>
-{% endblock %}
 
+  {% if object_list %}
+  <div class="vstack gap-3">
+    {% for r in object_list %}
+    <div class="border rounded-3 p-3">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="fw-semibold">{{ r.user.username }}</div>
+        <div class="text-muted small">{{ r.created_at|date:"d.m.Y" }}</div>
+      </div>
+      <div class="small text-muted mb-1">
+        Товар: {{ r.product.name }} Оценка: {{ r.rating }}/5
+      </div>
+      <div>{{ r.comment }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="text-muted small">Пока нет отзывов.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Category, Product
+from reviews.forms import ReviewForm
 from reviews.models import Review
+from reviews.services import user_has_delivered_purchase
 
 
 def home(request):
@@ -58,9 +60,22 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.object
+        user = self.request.user
         context["reviews"] = (
-            Review.objects.filter(product=self.object)
+             Review.objects.filter(product=product)
             .select_related("user")
             .order_by("-created_at")
         )
+        context["review_form"] = None
+        context["own_review"] = None
+        context["can_leave_review"] = False
+        if user.is_authenticated:
+            context["own_review"] = Review.objects.filter(user=user, product=product).first()
+            context["can_leave_review"] = (
+                user_has_delivered_purchase(user, product)
+                and context["own_review"] is None
+            )
+            if context["can_leave_review"]:
+                context["review_form"] = ReviewForm()
         return context

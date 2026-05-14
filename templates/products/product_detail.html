@@ -46,27 +46,41 @@
 
       <hr class="my-4" />
 
-      <div class="row g-3">
-        <div class="col-lg-7">
-          <div class="fw-semibold mb-2">Описание</div>
-          <div class="text-muted small">
-            Подходит для ежедневного ухода. Мягкое очищение, свежий аромат,
-            аккуратная пена.
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <div class="fw-semibold mb-2">Характеристики</div>
-          <ul class="small text-muted mb-0">
-            <li>Вес: 90–110 г</li>
-            <li>Тип кожи: нормальная/комбинированная</li>
-            <li>Аромат: свежий</li>
-          </ul>
-        </div>
-      </div>
-
-      <hr class="my-4" />
       <div class="fw-semibold mb-2">Отзывы</div>
-      {% if reviews %}
+
+      {% if can_leave_review and review_form %}
+      <div
+        class="border rounded-3 p-3 mb-3 bg-suds-accent border-success-subtle"
+      >
+        <div class="small fw-semibold mb-2">Оставить отзыв</div>
+        <form
+          method="post"
+          action="{% url 'reviews:create' object.pk %}"
+          class="vstack gap-2"
+        >
+          {% csrf_token %}
+          <div>
+            <label class="form-label small text-muted mb-0" for="id_rating"
+              >Оценка</label
+            >
+            {{ review_form.rating }}
+          </div>
+          <div>
+            <label class="form-label small text-muted mb-0" for="id_comment"
+              >Комментарий</label
+            >
+            {{ review_form.comment }}
+          </div>
+          <button type="submit" class="btn btn-success btn-sm align-self-start">
+            Отправить
+          </button>
+        </form>
+      </div>
+      {% elif user.is_authenticated and not own_review and not can_leave_review%}
+      <p class="text-muted small mb-3">
+        Отзыв можно оставить после доставки или получения товара по заказу.
+      </p>
+      {% endif %} {% if reviews %}
       <div class="vstack gap-3">
         {% for r in reviews %}
         <div class="border rounded-3 p-3">
@@ -76,17 +90,24 @@
           </div>
           <div class="small text-muted mb-1">Оценка: {{ r.rating }}/5</div>
           <div>{{ r.comment }}</div>
+          {% if user.is_authenticated and r.user_id == user.id %}
+          <form
+            method="post"
+            action="{% url 'reviews:delete' object.pk %}"
+            class="mt-2"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+              Удалить мой отзыв
+            </button>
+          </form>
+          {% endif %}
         </div>
         {% endfor %}
       </div>
       {% else %}
-      <div class="border rounded-3 p-3">
-        <div class="d-flex justify-content-between align-items-start">
-          <div class="fw-semibold">Анастасия</div>
-          <div class="text-muted small">19.04.2026</div>
-        </div>
-        <div class="small text-muted mb-1">Оценка: 5/5</div>
-        <div>Очень приятный аромат, кожу не сушит. Возьму ещё.</div>
+      <div class="text-muted small">
+        Пока никто не оставил отзыв на этот товар.
       </div>
       {% endif %}
     </div>
