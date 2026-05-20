@@ -9,9 +9,9 @@
 <div class="row g-3">
   <div class="col-md-5">
     <div class="bg-white border border-success-subtle rounded-3 p-4 shadow-sm">
-      {% with img=object.main_image %} {% if img %}
+      {% if object.image %}
       <img
-        src="{{ img.image.url }}"
+        src="{{ object.image.url }}"
         class="img-fluid rounded-3 border border-success-subtle"
         alt="{{ object.name }}"
       />
@@ -19,7 +19,7 @@
       <div
         class="ratio ratio-1x1 bg-suds-accent rounded-3 border border-success-subtle"
       ></div>
-      {% endif %} {% endwith %}
+      {% endif %}
     </div>
   </div>
   <div class="col-md-7">
@@ -36,12 +36,15 @@
       <p class="mb-4">{{ object.description }}</p>
 
       <div class="d-flex flex-wrap gap-2 align-items-center">
-        <button class="btn btn-success" type="button">
-          Добавить в корзину
-        </button>
-        <span class="text-muted small"
-          >Остаток: {{ object.stock_quantity }}</span
-        >
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'cart:add' object.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+          <button class="btn btn-success" type="submit">Добавить в корзину</button>
+        </form>
+        {% else %}
+        <a class="btn btn-success" href="{% url 'users:login' %}">Войти, чтобы купить</a>
+        {% endif %}
       </div>
 
       <hr class="my-4" />

@@ -62,7 +62,7 @@ Sudsology{%endblock%} {% block content %}
         </div>
         <div class="d-flex justify-content-between">
           <div>
-            Позиций: <span class="fw-semibold">{{ cart_items_count }}</span>
+            Товаров: <span class="fw-semibold">{{ cart_items_count }}</span>
           </div>
           <div>
             Сумма:
@@ -100,7 +100,9 @@ Sudsology{%endblock%} {% block content %}
             <tbody>
               {% for o in orders %}
               <tr>
-                <td class="fw-semibold">{{ o.id }}</td>
+                <td class="fw-semibold">
+                  <a class="link-success" href="{% url 'orders:detail' o.pk %}">{{ o.display_number }}</a>
+                </td>
                 <td>{{ o.created_at|date:"d.m.Y" }}</td>
                 <td>{{ o.get_status_display }}</td>
                 <td class="text-end fw-semibold">{{ o.total_price }} BYN</td>

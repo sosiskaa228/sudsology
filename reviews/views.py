@@ -3,24 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-from django.views.generic import ListView
 
 from products.models import Product
 
 from .forms import ReviewForm
 from .models import Review
 from .services import user_has_delivered_purchase
-
-
-class ReviewListView(ListView):
-    model = Review
-    template_name = "reviews/reviews.html"
-
-    def get_queryset(self):
-        return (
-            Review.objects.select_related("user", "product")
-            .order_by("-created_at")
-        )
 
 
 @login_required

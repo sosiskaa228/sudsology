@@ -6,12 +6,13 @@ from products.models import Product
 
 class Order(models.Model):
     class Status(models.TextChoices):
-        PENDING = "pending", "Pending"
-        PAID = "paid", "Paid"
-        SHIPPED = "shipped", "Shipped"
-        COMPLETED = "completed", "Completed"
-        CANCELLED = "cancelled", "Cancelled"
+        PENDING = "pending", "Ожидает"
+        PAID = "paid", "Оплачен"
+        SHIPPED = "shipped", "Отправлен"
+        COMPLETED = "completed", "Завершён"
+        CANCELLED = "cancelled", "Отменён"
 
+    number = models.PositiveIntegerField(unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -19,9 +20,14 @@ class Order(models.Model):
 
     class Meta:
         verbose_name = "Заказ"
+        ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return f"Order({self.id}) {self.status}"
+        return f"Заказ {self.display_number}"
+
+    @property
+    def display_number(self) -> str:
+        return f"{self.number:04d}"
 
 
 class OrderItem(models.Model):
@@ -35,3 +41,7 @@ class OrderItem(models.Model):
 
     def __str__(self) -> str:
         return f"{self.product_id} x{self.quantity}"
+
+    @property
+    def line_total(self):
+        return self.price_at_purchase * self.quantity

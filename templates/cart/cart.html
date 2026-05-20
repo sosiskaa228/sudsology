@@ -40,12 +40,34 @@
             </div>
           </td>
           <td class="text-end">{{ i.product.price|floatformat:2 }}</td>
-          <td class="text-center">{{ i.quantity }}</td>
+          <td class="text-center">
+            <form
+              method="post"
+              action="{% url 'cart:update' i.pk %}"
+              class="d-inline-flex gap-1 align-items-center justify-content-center"
+            >
+              {% csrf_token %}
+              <input
+                type="number"
+                name="quantity"
+                value="{{ i.quantity }}"
+                min="1"
+                class="form-control form-control-sm"
+                style="width: 4rem"
+              />
+              <button class="btn btn-outline-success btn-sm" type="submit">
+                OK
+              </button>
+            </form>
+          </td>
           <td class="text-end fw-semibold">{{ i.line_total|floatformat:2 }}</td>
           <td class="text-end">
-            <button class="btn btn-outline-success btn-sm" type="button">
-              Удалить
-            </button>
+            <form method="post" action="{% url 'cart:remove' i.pk %}">
+              {% csrf_token %}
+              <button class="btn btn-outline-success btn-sm" type="submit">
+                Удалить
+              </button>
+            </form>
           </td>
         </tr>
         {% endfor %}
@@ -56,12 +78,23 @@
   <div class="text-muted small">Корзина пока пустая.</div>
   {% endif %}
 
-  <div class="d-flex justify-content-end">
-    <div class="border rounded-3 p-3 bg-suds-accent border-success-subtle">
-      <div class="d-flex justify-content-between gap-4">
-        <div class="text-muted">Итого</div>
-        <div class="fw-semibold">{{ total|floatformat:2 }} BYN</div>
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-3">
+    <a class="btn btn-outline-success btn-sm" href="{% url 'products:catalog' %}"
+      >В каталог</a
+    >
+    <div class="d-flex flex-wrap align-items-center gap-3">
+      <div class="border rounded-3 p-3 bg-suds-accent border-success-subtle">
+        <div class="d-flex justify-content-between gap-4">
+          <div class="text-muted">Итого</div>
+          <div class="fw-semibold">{{ total|floatformat:2 }} BYN</div>
+        </div>
       </div>
+      {% if items %}
+      <form method="post" action="{% url 'orders:checkout' %}">
+        {% csrf_token %}
+        <button class="btn btn-success" type="submit">Оформить заказ</button>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>

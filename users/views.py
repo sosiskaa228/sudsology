@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.db.models import F, Sum
 
-from cart.models import CartItem
+from cart.models import Cart, CartItem
 from orders.models import Order
 from .forms import ProfileUpdateForm, RegisterForm
 
@@ -19,6 +19,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            Cart.objects.get_or_create(user=user)
             login(request, user)
             messages.success(request, "Регистрация прошла успешно.")
             return redirect("users:account")
@@ -52,7 +53,9 @@ def account(request):
             .select_related("product", "cart")
             .annotate(line_total=F("quantity") * F("product__price"))
         )
-        cart_items_count = cart_items.count()
+        cart_items_count = (
+            cart_items.aggregate(total=Sum("quantity")).get("total") or 0
+        )
         cart_total = (
             cart_items.aggregate(total=Sum("line_total")).get("total") or Decimal("0.00")
         )

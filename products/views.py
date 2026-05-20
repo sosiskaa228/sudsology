@@ -2,7 +2,7 @@ from django.db.models.functions import Lower
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
-from .models import Category, Product
+from .models import Product
 from reviews.forms import ReviewForm
 from reviews.models import Review
 from reviews.services import user_has_delivered_purchase
@@ -27,10 +27,6 @@ class ProductListView(ListView):
                 _qname__contains=text.lower(),
             )
 
-        cat = get.get("category") or ""
-        if cat.isdigit():
-            qs = qs.filter(category_id=int(cat))
-
         how = get.get("sort") or "new"
         if how == "cheap":
             qs = qs.order_by("price")
@@ -46,10 +42,7 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         get = self.request.GET
-        cat_raw = get.get("category") or ""
-        context["categories"] = Category.objects.order_by("name")
         context["current_q"] = (get.get("q") or "").strip()
-        context["category_id"] = int(cat_raw) if cat_raw.isdigit() else None
         context["current_sort"] = get.get("sort") or "new"
         return context
 
